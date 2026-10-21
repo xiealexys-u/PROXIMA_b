@@ -61,7 +61,7 @@ export function createViewer(canvas,onSelect){
       if(requestedMotion)api.playMotion(requestedMotion);
       api.stats={meshes:meshes.length,triangles:meshes.reduce((n,m)=>n+(m.geometry.index?.count||m.geometry.attributes.position.count)/3,0)};
     }catch(error){fail(error)}
-  },event=>{loading.textContent=event.total?'LOADING YOUR SUIT · '+Math.round(event.loaded/event.total*100)+'%':'LOADING YOUR SUIT…';},fail);
+  },event=>{loading.textContent=event.total?'LOADING YOUR SUIT · '+Math.min(100,Math.round(event.loaded/event.total*100))+'%':'LOADING YOUR SUIT…';},fail);
   new GLTFLoader().load('./assets/marvin-junior/marvin-junior.json?v=parts-1',gltf=>{
     const model=gltf.scene;model.updateMatrixWorld(true);
     const box=new THREE.Box3().setFromObject(model),size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3()),scale=1.75/size.y;

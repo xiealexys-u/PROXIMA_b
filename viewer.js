@@ -26,7 +26,7 @@ export function createViewer(canvas,onSelect){
   const aim=new THREE.Vector3(-1,1.9,0),goal=new THREE.Vector3(),point=new THREE.Vector3(),palmCenter=new THREE.Vector3();
   let distance=9,last=performance.now(),width=0,height=0;
   function fail(error){console.error('Suit model:',error);loading.hidden=true;document.querySelector('#fallback').hidden=false;document.querySelector('#fallback p').textContent='The 3D model could not load. Reload to retry, or use the component menu.';document.body.classList.add('fallback');for(const b of Object.values(markers))b.hidden=true;document.querySelector('#rotate-toggle').disabled=true;}
-  new GLTFLoader().load('./assets/spacesuit.gltf?v=texture-1',gltf=>{
+  new GLTFLoader().load('./assets/spacesuit.json?v=texture-1',gltf=>{
     try{
       const model=gltf.scene;model.updateMatrixWorld(true);
       const bounds=new THREE.Box3().setFromObject(model),size=bounds.getSize(new THREE.Vector3()),center=bounds.getCenter(new THREE.Vector3());
@@ -62,7 +62,7 @@ export function createViewer(canvas,onSelect){
       api.stats={meshes:meshes.length,triangles:meshes.reduce((n,m)=>n+(m.geometry.index?.count||m.geometry.attributes.position.count)/3,0)};
     }catch(error){fail(error)}
   },event=>{loading.textContent=event.total?'LOADING YOUR SUIT · '+Math.round(event.loaded/event.total*100)+'%':'LOADING YOUR SUIT…';},fail);
-  new GLTFLoader().load('./assets/marvin-junior.glb?v=parts-1',gltf=>{
+  new GLTFLoader().load('./assets/marvin-junior/marvin-junior.json?v=parts-1',gltf=>{
     const model=gltf.scene;model.updateMatrixWorld(true);
     const box=new THREE.Box3().setFromObject(model),size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3()),scale=1.75/size.y;
     model.scale.multiplyScalar(scale);model.position.set(-center.x*scale,-box.min.y*scale,-center.z*scale);cart.add(model);
@@ -85,7 +85,7 @@ export function createViewer(canvas,onSelect){
     const b=document.createElement('button');b.className='hotspot cart-hotspot';b.innerHTML='<span class="dot"></span><span class="tag">MARVIN JUNIOR / EQUIPMENT</span>';b.setAttribute('aria-label','Inspect Marvin Junior cart');b.addEventListener('click',()=>onSelect('cart'));document.querySelector('#hotspots').append(b);markers.cart=b;
     cartReady=true;document.dispatchEvent(new CustomEvent('cart-ready'));
   },undefined,error=>{console.error('Cart model:',error);document.dispatchEvent(new CustomEvent('cart-error'));});
-  new GLTFLoader().load('./assets/fungus.glb?v=1',gltf=>{
+  new GLTFLoader().load('./assets/fungus/fungus.json?v=1',gltf=>{
     const fungus=gltf.scene;
     const bounds=new THREE.Box3().setFromObject(fungus),size=bounds.getSize(new THREE.Vector3()),center=bounds.getCenter(new THREE.Vector3());
     const scale=.34/size.y;
